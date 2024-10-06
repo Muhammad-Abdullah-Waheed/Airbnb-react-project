@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import './App.css'
-import Navbar from './components/navbar'
+import Navbar from './components/Navbar/navbar'
+import Footer from './components/footer'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div>
-      <Navbar/>
-    </div>
+    <>
+      <div><Navbar/></div>
+      {/* <div><Footer/></div> */}
+    </>
   )
 }
 

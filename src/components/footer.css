@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+}
+
+.footer {
+    background-color: #f8f8f8;
+    padding: 2rem 5vw;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #ddd;
+}
+
+.footer-section {
+    margin-bottom: 2rem;
+}
+
+.footer h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    margin-bottom: 1rem;
+}
+
+.footer-links h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin: 0.5rem 0;
+}
+
+.footer-bottom {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.language-currency {
+    margin-top: 1rem;
+}
+
+.language-currency select {
+    margin: 0 0.5rem;
+    padding: 0.5rem;
+}

@@ -1,0 +1,121 @@
+.navbar{
+    height: 5rem;
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    padding: 0rem 2.5rem;
+    background-color:none;
+    position: sticky;
+    z-index: 1000;
+    border-bottom: 1px solid var(--grey);
+}
+
+/* navbar logo */
+.nav-left{
+    height: 2rem;
+    cursor: pointer;
+}
+
+.nav-mid{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    align-content: center;
+    
+}
+
+.nav-mid ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1rem 0.9rem;
+    gap: 12px;
+    margin-left: 2vw;
+    list-style: none ;
+    border-radius: 42px;
+    border: 1px solid var(--grey);
+    box-shadow: 2px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%);
+}
+
+.nav-mid ul:hover {
+    box-shadow: 0 1px 2px rgb(0 0 0 / 15%), 0 4px 12px rgb(0 0 0 / 10%);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+.mid-nav-btn{
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--black);
+    align-items: center;
+    border-right: 1px solid var(--grey);
+    padding-right: 10px;
+    padding-top: 0%;
+    list-style: none ;
+}
+
+.mid-nav-btn1{
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--font-grey);
+    align-items: center;
+    padding-right: 7px;
+    list-style: none;
+}
+
+.search-icon{
+    padding: 4px;
+    margin-top: 7px;
+    border: none;
+    border-radius: 42px;
+    background-color: var(--theme);
+    height: 5px;
+    width: 5px; 
+}
+
+.nav-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: auto;
+    background-color: none;
+}
+
+.nav-right-home{
+    padding: 4px 14px;
+    font-style: bold;
+    font-weight: 600;
+    border-radius: 40px;
+
+}
+.nav-right-home:hover{
+    background-color: var(--grey);
+    cursor: pointer;
+}
+
+.nav-right-lang {
+    padding: 5px 9px;
+    margin-top: 5px;
+    border-radius: 40px;
+}
+
+.nav-right-lang:hover{
+    background-color: var(--grey);
+    cursor: pointer;
+}
+
+.nav-profile {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--grey);
+    padding: 0px 11px;
+    padding-top: 5px;
+    border-radius: 42px;
+    cursor: pointer;
+}
+
+.nav-profile:hover{
+    box-shadow: 1rem;
+}
