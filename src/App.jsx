@@ -2,12 +2,14 @@ import { useState } from 'react'
 import './App.css'
 import Navbar from './components/Navbar/navbar'
 import Footer from './components/footer'
+import Filter from './components/filters/filter';
 
 function App() {
 
   return (
     <>
-      <div><Navbar/></div>
+      <Navbar/>
+      <Filter/>
       {/* <div><Footer/></div> */}
     </>
   )

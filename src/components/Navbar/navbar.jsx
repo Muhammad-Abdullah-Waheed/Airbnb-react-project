@@ -4,11 +4,13 @@ import logo from '../../assets/logo.png'
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 import Menu from './menu.jsx'
-
+import BottomNavBar from '../Navbar/bottomnavbar.jsx';
+// import searchBar from '../Navbar/searchbar.jsx';
 
 const Navbar = () => {
     return (
-        <nav className="navbar">
+        <div>
+            <nav className="navbar">
             <img src={logo} alt="website logo" className='nav-left' />
 
             <div className='nav-mid'>
@@ -24,7 +26,7 @@ const Navbar = () => {
 
             <div className='nav-right'>
                 <div className='nav-right-home'>Airbnb your home</div>
-                <div className='nav-right-lang'> <LanguageIcon sx={{ fontSize: "1.4rem" }}/></div>
+                <div className='nav-right-lang'> <LanguageIcon sx={{ fontSize: "1.4rem"}}/></div>
                 <div className='nav-profile'>
                     <div>
                     <Menu/>
@@ -32,6 +34,12 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
+                {/* <div className='responsive-search-bar'>
+                <SearchRoundedIcon sx={{fontSize:"4rem"}}/>
+
+                </div> */}
+                <div><BottomNavBar /></div>
+        </div>
     );
 };
 
