@@ -1,15 +1,16 @@
 import React from 'react';
-import './Navbar.css'; // Import CSS for styling
+import './Navbar.css'; 
 import logo from '../../assets/logo.png'
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 import Menu from './menu.jsx'
 import BottomNavBar from '../Navbar/bottomnavbar.jsx';
-// import searchBar from '../Navbar/searchbar.jsx';
+import MobileSearchBar from '../Navbar/searchbar'
 
 const Navbar = () => {
     return (
         <div>
+            <div> <MobileSearchBar/> </div>
             <nav className="navbar">
             <img src={logo} alt="website logo" className='nav-left' />
 

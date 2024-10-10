@@ -4,7 +4,7 @@ import Navbar from './components/Navbar/navbar'
 import Footer from './components/footer'
 import Filter from './components/filters/filter';
 import { list, list2 } from "./components/Card/cardlist.js";
-import Cards from './components/Card/index.jsx';
+import Cards from './components/Card/Cards.jsx';
 
 function App() {
 
@@ -12,6 +12,8 @@ function App() {
     <>
       <Navbar/>
       <Filter/>
+      {/* <Cards list={list}/> */}
+      {/* <h1 className='experiences-heading'>Past experiences</h1> */}
       <Cards list={list2}/>
       {/* <div><Footer/></div> */}
     </>

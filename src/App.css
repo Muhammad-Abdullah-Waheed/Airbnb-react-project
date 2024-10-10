@@ -12,3 +12,9 @@
   --theme: #ff385c;
   --light-grey: #f7f7f7;
 }
+
+.experiences-heading{
+  border-bottom: 2px solid black !important;
+  width: 20%;
+  margin: 3.7vw;
+}

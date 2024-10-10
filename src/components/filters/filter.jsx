@@ -7,7 +7,8 @@ function Filter() {
 
   // Function to handle filter selection
   return (
-    <div className="filters-containers">
+    <div className="filter"> 
+      <div className="filters-containers">
       {links.map((item, i) => (
         <div
           key={i}
@@ -23,6 +24,7 @@ function Filter() {
           </p>
         </div>
       ))}
+    </div>
     </div>
   );
 }
