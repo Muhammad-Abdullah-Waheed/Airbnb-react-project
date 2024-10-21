@@ -1,0 +1,16 @@
+.footer{
+    text-align: left;
+}
+
+.footer-section-1-ul{
+    display: flex;
+    overflow-wrap: wrap;
+    gap: 2.6%;
+    border-bottom: 1.7px solid var(--grey);
+
+}
+
+.footer-section-1-ul li{
+    color: var(--font-grey);
+    
+}
