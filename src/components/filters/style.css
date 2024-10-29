@@ -12,9 +12,7 @@
     justify-content: flex-start;
     align-items: center;
     overflow-x: auto;
-    /* overflow: hidden; */
-
-    
+    scrollbar-width: none;    
   }
 
   .links-box {

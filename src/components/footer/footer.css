@@ -1,16 +1,36 @@
 .footer{
     text-align: left;
-}
-
-.footer-section-1-ul{
     display: flex;
-    overflow-wrap: wrap;
-    gap: 2.6%;
-    border-bottom: 1.7px solid var(--grey);
-
+    justify-content: space-between;
+    background-color: #f7f7f7;
+    color: #303030;
+    padding: 0px 40px;
+    font-family: "Nunito Sans", sans-serif;
 }
 
-.footer-section-1-ul li{
-    color: var(--font-grey);
-    
+.hosting-section{
+    margin-top: 50px;
+    width: 33.333%;
+}
+.hosting-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.hosting-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.hosting-section ul li {
+    margin: 5px 0;
+}
+
+.hosting-section ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.hosting-section ul li a:hover {
+    color: #007bff;
 }
