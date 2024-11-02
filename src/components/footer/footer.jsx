@@ -4,6 +4,7 @@ import './footer.css'; // Assuming you'll use CSS for styling
 const Footer = () => {
     return (
         <footer className="footer">
+            <div className="footer-section-1">
             <section class="hosting-section">
                 <h3>Support</h3>
                 <ul>
@@ -43,9 +44,18 @@ const Footer = () => {
                     <li><a href="https://www.airbnb.org?locale=en">Airbnb.org emergency stays</a></li>
                 </ul>
             </section>
-
+            </div>
+            <hr/>
+            <section className='footer-section-2'>
+                Abdullah
+            </section>
         </footer>
     );
 };
 
 export default Footer;
+
+
+
+
+

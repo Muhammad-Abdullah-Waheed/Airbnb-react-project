@@ -1,42 +1,4 @@
-.navbar {
-    height: 5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0rem 3rem;
-    background-color: none;
-    position: sticky;
-    z-index: 1000;
-    border-bottom: 1px solid var(--grey);
-}
 
-/* navbar logo */
-.nav-left {
-    content: url('../../assets/logo.png');
-    height: 2rem;
-    cursor: pointer;
-}
-
-.nav-mid {
-    display: flex;
-    justify-content: flex-end;
-    align-content: center;
-
-}
-
-.nav-mid ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.1rem 0.9rem;
-    gap: 12px;
-    margin-left: 2vw;
-    list-style: none;
-    border-radius: 42px;
-    border: 1px solid var(--grey);
-    box-shadow: 2px;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%);
-}
 
 .nav-mid ul:hover {
     box-shadow: 0 1px 2px rgb(0 0 0 / 15%), 0 4px 12px rgb(0 0 0 / 10%);
@@ -72,53 +34,6 @@
     background-color: var(--theme);
     height: 5px;
     width: 5px;
-}
-
-.nav-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    padding: auto;
-    background-color: none;
-}
-
-.nav-right-home {
-    padding: 4px 14px;
-    font-style: bold;
-    font-weight: 600;
-    border-radius: 40px;
-
-}
-
-.nav-right-home:hover {
-    background-color: var(--grey);
-    cursor: pointer;
-}
-
-.nav-right-lang {
-    padding: 4px 9px;
-    margin-top: 5px;
-    border-radius: 500px;
-}
-
-.nav-right-lang:hover {
-    background-color: var(--grey);
-    cursor: pointer;
-}
-
-.nav-profile {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--grey);
-    padding: 0px 11px;
-    padding-top: 5px;
-    border-radius: 42px;
-    cursor: pointer;
-}
-
-.nav-profile:hover {
-    box-shadow: 1rem;
 }
 
 .bottom-nav {
@@ -157,8 +72,6 @@
     .nav-mid {
         display: none;
     }
-
-
 }
 
 @media (max-width: 800px) {
@@ -198,24 +111,4 @@
         justify-content: center;
         align-items: center;
     }
-}
-
-.search-icon {
-    padding: 9px;
-}
-
-.search-input {
-    width: 80vw;
-    padding: 10px;
-    border-radius: 40px;
-}
-
-
-
-
-.responsive-search-bar {
-    background-color: rgb(194, 156, 156);
-    height: 4rem;
-    border-radius: 40px;
-    margin: 0.7rem 1rem;
 }

@@ -1,11 +1,19 @@
 .footer{
+    padding: 0px 40px;
+    background-color: #f7f7f7;
+}
+.footer-section-1{
     text-align: left;
     display: flex;
     justify-content: space-between;
-    background-color: #f7f7f7;
+    
     color: #303030;
-    padding: 0px 40px;
+    
     font-family: "Nunito Sans", sans-serif;
+}
+
+.footer-section-2{
+    padding: 1.5rem 0rem;
 }
 
 .hosting-section{
