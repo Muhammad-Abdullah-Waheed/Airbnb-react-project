@@ -63,19 +63,23 @@
 }
 
 @media (max-width: 900px) {
-    .nav-left {
+    .navbar-logo {
         content: url('../../assets/logo1.png');
     }
 }
 
 @media (max-width: 960px) {
-    .nav-mid {
+    .mid-navbar-3 {
         display: none;
     }
 }
 
 @media (max-width: 800px) {
     .navbar {
+        display: none;
+    }
+
+    .navbar-container{
         display: none;
     }
 

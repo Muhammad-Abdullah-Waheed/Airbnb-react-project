@@ -3,9 +3,9 @@
 }
 
 .filters-containers {
+    min-height: 85px;
     border-top: 1px solid var(--grey);
-    border-bottom: 1px solid var(--grey);
-    padding-bottom: 0px !important;
+    padding-bottom: 1px !important;
     padding: 1vw 0vw;
     overflow: hidden;
     display: flex;
@@ -22,13 +22,14 @@
     align-items: center;
     margin-right: 2rem;
     opacity: 0.7;
-    border-bottom: 1px solid var(--white);
+    border-bottom: 2px solid var(--white);
     min-width: 85px;
   }
   
   .links-box:hover,
   .selected-box {
     opacity: 1;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--black);
     transition: all 0.3s;
     cursor: pointer;

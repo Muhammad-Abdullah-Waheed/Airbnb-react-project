@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { links } from "../filters/filterlinks";
 import "../filters/style.css";
 
 function Filter() {
     const [selectedFilter, setSelectedFilter] = useState("");
+    const [isScrolled, setIsScrolled] = useState(false);
+    
+  // Update `isScrolled` state on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0); // Set true if scrolled down
+    };
 
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up the event listener on component unmount
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   // Function to handle filter selection
   return (
-    <div className="filter"> 
+    <div className={`filter sticky z-20  shadow-md  bg-white ${
+      isScrolled ? "top-[70px]" : "top-[160px]"} transition-all duration-100 ease-in-out`}>
       <div className="filters-containers">
       {links.map((item, i) => (
         <div
@@ -24,7 +37,7 @@ function Filter() {
           </p>
         </div>
       ))}
-    </div>
+      </div>
     </div>
   );
 }
