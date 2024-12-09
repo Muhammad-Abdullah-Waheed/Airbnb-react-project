@@ -63,37 +63,54 @@ router.post("/login", async (req, res) => {
     }
 
     // Create a JWT token upon successful login
-    const token = jwt.sign(
-      {email: user.email, id: user._id},
-      process.env.JWT_SECRET, // Ensure you have JWT_SECRET in your environment variables
-      { expiresIn: "3h" }, // Token expiration time
-      (error, token) => {
-        if (error) throw error;
-        res.cookie("token", token).json(user);
-      });
+    const token = await jwt.sign(
+      { email: user.email, id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+    res.cookie("token", token).json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-router.get('/profile',(req,res)=>{
-   const {token} = req.cookies;
-  if(token){
-    jwt.verify(token, process.env.JWT_SECRET, async(err,userdata)=>{
-      if(err){
-        return res.json({message:'Token is not valid'});
-      }
-      const user = await User.findOne(userdata.id);
-      res.json(user);
-    });
+
+
+
+
+router.get('/profile', async (req, res) => {
+  const { token } = req.cookies;
+  if (!token) {
+    return res.status(401).json({ message: 'Token is not provided' });
   }
-  else{
-    return res.json({message:'Token is not provided'});
+
+  try {
+    // Verify the JWT token
+    const userdata = jwt.verify(token, process.env.JWT_SECRET);
+    // Ensure the token contains an ID
+    if (!userdata.id) {
+      return res.status(400).json({ message: 'Invalid token: User ID not found' });
+    }
+
+    // Query the user from the database
+    const user = await User.findOne({ _id: userdata.id });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the user data
+    return res.json(user);
+  } catch (err) {
+    console.error('Error verifying token or querying user:', err);
+    return res.status(500).json({ message: 'An error occurred' });
   }
 });
 
 
+router.get('/logout',(req,res)=>{
+  res.clearCookie('token').send('Logged out successfully');
+});
 
 
 

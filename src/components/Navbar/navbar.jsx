@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
@@ -10,6 +10,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../userContex.jsx";
+import axios from "axios";
 
 const Navbar = ({ showNavMid2 = true }) => {
   const [location, setloation] = useState("");
@@ -46,7 +48,11 @@ const Navbar = ({ showNavMid2 = true }) => {
           {" "}
           <MobileSearchBar />
         </div>
-        <nav className={`Navbar h-20 flex justify-between items-center px-12 sticky z-10 bg-white  ${isScrolled? "border-b-2":""}`}>
+        <nav
+          className={`Navbar h-[85px] flex justify-between items-center px-12 sticky z-10 bg-white  ${
+            isScrolled ? "border-b-2" : ""
+          }`}
+        >
           <img
             src={logo}
             alt="website logo"
@@ -114,7 +120,9 @@ const Navbar = ({ showNavMid2 = true }) => {
         }`}
       >
         {/* Main Navigation Component */}
-        <div
+        {!!showNavMid2 &&
+        (
+          <div
           className={`nav-mid2 flex justify-center gap-2 bg-white transition-transform duration-300 ease-in-out ${
             isScrolled
               ? "-translate-y-full opacity-0"
@@ -169,6 +177,7 @@ const Navbar = ({ showNavMid2 = true }) => {
             </li>
           </ul>
         </div>
+        )}
       </div>
     </div>
   );
@@ -180,6 +189,8 @@ const DropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+
+  const { User, SetUser } = useContext(UserContext);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -208,6 +219,20 @@ const DropdownMenu = () => {
     navigate("/login"); // Navigate to the login page
   };
 
+  const handleAccountClick = () => {
+    setIsOpen(false); // Close the dropdown
+    navigate("/Account"); // Navigate to the Account page
+  };
+
+  const handleLogoutClick = async() => {
+    setIsOpen(false); // Close the dropdown
+    const reponse = await axios.get('/api/logout');
+    console.log(reponse.data);
+    navigate("/"); // Navigate to the Home page
+    SetUser(null); // Clear user from context
+    
+  };
+
   const handleSignUpClick = () => {
     setIsOpen(false); // Close the dropdown
     navigate("/register"); // Navigate to the SignUp page
@@ -218,10 +243,18 @@ const DropdownMenu = () => {
       <button
         ref={menuRef}
         onClick={toggleDropdown}
-        className="bg-white hover:shadow-md px-3 py-1 rounded-full border-[1px] "
+        className="flex space-x-1 bg-white hover:shadow-md px-3 py-1 rounded-full border-[1px] "
       >
-        <MenuIcon sx={{ fontSize: "2rem", color: "black", padding: " 7px" }} />
+        <MenuIcon
+          sx={{
+            fontSize: "2rem",
+            color: "black",
+            padding: " 7px",
+            marginTop: "4px",
+          }}
+        />
         <AccountCircleIcon sx={{ fontSize: "2.4rem", color: "gray" }} />
+        {!!User && <div className="mt-[7px]">{User.name}</div>}
       </button>
 
       {/* Dropdown Content */}
@@ -231,18 +264,39 @@ const DropdownMenu = () => {
           ref={menuRef}
         >
           <div>
+            {!!User && (
+              <button
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={handleAccountClick}
+              >
+                Account
+              </button>
+            )}
+
             <button
               className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
               onClick={handleSignUpClick}
             >
               Sign Up
             </button>
-            <button
-              className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={handleLoginClick}
-            >
-              Log in
-            </button>
+            {!!!User && (
+              <button
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={handleLoginClick}
+              >
+                Log in
+              </button>
+            )}
+
+            {!!User && (
+              <button
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={handleLogoutClick}
+              >
+                Log out
+              </button>
+            )}
+
             <hr />
             <button className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
               Gift cards
@@ -264,7 +318,14 @@ const DropdownMenu = () => {
 };
 
 // Generic Counter Component
-const Counter = ({ label, description, count, onIncrement, onDecrement, minCount = 0 }) => (
+const Counter = ({
+  label,
+  description,
+  count,
+  onIncrement,
+  onDecrement,
+  minCount = 0,
+}) => (
   <div className="guest-category flex justify-between items-center py-4 border-b border-gray-200">
     <div>
       <h3 className="text-lg font-semibold text-gray-800">{label}</h3>
@@ -279,7 +340,9 @@ const Counter = ({ label, description, count, onIncrement, onDecrement, minCount
       >
         -
       </button>
-      <span className="counter-value text-lg font-medium text-gray-700">{count}</span>
+      <span className="counter-value text-lg font-medium text-gray-700">
+        {count}
+      </span>
       <button
         className="counter-button w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold transition hover:bg-blue-600"
         onClick={onIncrement}
@@ -301,10 +364,7 @@ const GuestCountSelector = () => {
 
   return (
     <div className="">
-      <button
-        className="flex justify-center items-center"
-        onClick={toggleOpen}
-      >
+      <button className="flex justify-center items-center" onClick={toggleOpen}>
         <span className="text-gray-500 font-medium">Who</span>
         <div className="text-gray-400 font-small px-8">Add Guest</div>
         <SearchRoundedIcon

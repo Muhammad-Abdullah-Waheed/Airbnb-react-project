@@ -1,7 +1,10 @@
 // index.js
 const express = require("express");
 const app = express();
+
+
 const cors = require("cors"); // Enable CORS for cross-origin requests
+
 const globals = require("./globals");
 const cookieParser = require("cookie-parser");
 
@@ -25,7 +28,7 @@ app.use(cookieParser());
 async function connectToMongoDB() {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
+      useNewUrlParser: true,  
       useUnifiedTopology: true,
       dbName: 'sample_airbnb'
     });

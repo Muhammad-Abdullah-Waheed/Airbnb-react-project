@@ -1,32 +1,24 @@
+import {createContext, useEffect, useState} from "react";
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+// import {data} from "autoprefixer";
 
+export const UserContext = createContext({});
 
-
-export const UserContex = createContext({});
-
-export function UserContextProvider({children}){
-    const [User ,setUser] = useState();
-
-    // useEffect(() => {
-    //     if (!User) {
-    //       const fetchUser = async () => {
-    //         try {
-    //           const response = await axios.get('/api/profile');
-    //           setUser(response.data);
-    //         } catch (error) {
-    //           console.error("Error fetching user data:", error);
-    //         }
-    //       };
-    //       fetchUser();
-    //     }
-    //   }, []);
-      
-
-
-    return (
-        <UserContex.Provider value={{User ,setUser}}>
-            {children}
-        </UserContex.Provider>
-    );
+export function UserContextProvider({children}) {
+  const [User,SetUser] = useState(null);
+  const [ready,setReady] = useState(false);
+  
+  useEffect(() => {
+    if (!User) {
+      axios.get('/api/profile').then(({data}) => {
+        SetUser(data);
+        setReady(true);
+      });
+    }
+  }, []);
+  return (
+    <UserContext.Provider value={{User: User,SetUser: SetUser,ready}}>
+      {children}
+    </UserContext.Provider>
+  );
 }
