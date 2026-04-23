@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RegisterListing from "./RigisterListing";
+import axios from "axios";
+import { UserContext } from "../../userContex";
+import Cards from "../Card/Cards";
 
 const MyListing = () => {
   const [addListing, setAddListing] = useState(false);
+  const { User, SetUser } = useContext(UserContext);
   const handleAddListing = (ev) => {
     ev.preventDefault();
     setAddListing(true);
   };
 
   return (
-    <div >
+    <div>
       {!addListing && (
         <div className="mt-6 flex content-center justify-center">
           <button
@@ -43,7 +47,7 @@ const MyListing = () => {
 
       {!addListing && (
         <div>
-          <UserListing />
+          <UserListing userEmail={User.email} />
         </div>
       )}
     </div>
@@ -52,10 +56,35 @@ const MyListing = () => {
 
 export default MyListing;
 
+const UserListing = ({ userEmail }) => {
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const UserListing = () => {
+  // Fetch listings when the component mounts
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        // Send GET request to API endpoint to fetch user listings
+        const response = await axios.get(`/api/listings/${userEmail}`);
+        setListings(response.data.listings); // Store listings in state
+        console.log(listings);
+      } catch (err) {
+        setError("Failed to fetch listings");
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+
+    fetchListings(); // Call the fetch function
+  }, [userEmail]); // Re-fetch if userEmail changes
+
+  if (loading) return <div>Loading...</div>; // Display loading message
+  if (error) return <div>{error}</div>; // Display error message if there's an issue
+
   return (
-    <div>UserListing</div>
-  )
-}
-
+    <div>
+      <Cards list={listings} showbuttons={true} />
+    </div>
+  );
+};

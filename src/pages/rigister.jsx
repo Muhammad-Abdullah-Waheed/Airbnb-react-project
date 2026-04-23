@@ -28,13 +28,14 @@ const Modal = ({ isOpen, onClose }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword0, setShowPassword0] = useState(false); // To toggle visibility of password
   const [showPassword1, setShowPassword1] = useState(false); // To toggle visibility of password
+  const [isHost, setIsHost] = useState(false); // To toggle visibility of
 
-  const {User ,SetUser} = useContext(UserContext);
+  const { User, SetUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   // It will Register a new user in the database
-  const handleFormSubmit = async(e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       console.log({ name, email, usernumber, password });
@@ -44,11 +45,11 @@ const Modal = ({ isOpen, onClose }) => {
           email: email,
           password: password,
           usernumber: usernumber,
+          role: isHost? 'host':'user'
         });
         console.log("Rigisteration successful _!");
 
-        navigate('/login');
-
+        navigate("/login");
       } catch (error) {
         console.log(error);
       }
@@ -133,6 +134,57 @@ const Modal = ({ isOpen, onClose }) => {
             </button>
           </div>
 
+          {/* user role selection  */}
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-2 my-2">
+            <div
+              className={`w-full flex items-center px-4 py-2 gap-3 rounded-lg border cursor-pointer transition-all ${
+                isHost ? "border-blue-500 bg-blue-100" : "border-gray-300"
+              }`}
+              onClick={() => setIsHost(true)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
+                />
+              </svg>
+
+              <span>Join as Host</span>
+            </div>
+
+            <div
+              className={`w-full flex items-center px-4 py-2 gap-3 rounded-lg border cursor-pointer transition-all ${
+                !isHost ? "border-blue-500 bg-blue-100" : "border-gray-300"
+              }`}
+              onClick={() => setIsHost(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+
+              <span>Join as User</span>
+            </div>
+          </div>
+
           {/* Register button */}
           <button
             type="submit"
@@ -201,21 +253,6 @@ const Modal = ({ isOpen, onClose }) => {
                 fill="#fff"
                 d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
               ></path>
-            </svg>
-          </button>
-          <button className="border border-gray-300 px-4 py-1 rounded-lg flex justify-between items-center hover:bg-gray-100 transition duration-300">
-            <span className="text-center flex-1 text-gray-700">
-              Continue with Twitter
-            </span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              x="0px"
-              y="0px"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path d="M 17.214844 2.9863281 A 1.250125 1.250125 0 0 0 16.277344 3.4648438 L 12.351562 8.3339844 L 9.0566406 3.7714844 C 8.7066406 3.2874844 8.1458281 3 7.5488281 3 L 4.078125 3 C 3.420125 3 3.0388281 3.7462969 3.4238281 4.2792969 L 9.1855469 12.257812 L 3.7773438 18.964844 A 1.250125 1.250125 0 1 0 5.7226562 20.535156 L 10.703125 14.359375 L 14.943359 20.228516 C 15.293359 20.712516 15.854172 21 16.451172 21 L 19.921875 21 C 20.579875 21 20.961172 20.253703 20.576172 19.720703 L 13.869141 10.433594 L 18.222656 5.0351562 A 1.250125 1.250125 0 0 0 17.214844 2.9863281 z"></path>
             </svg>
           </button>
         </div>

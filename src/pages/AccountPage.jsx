@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Navbar from "../components/Navbar/navbar";
 import { UserContext } from "../userContex";
-import axios from "axios";
 import { Link, useLocation } from "react-router-dom";
 import Footer from "../components/footer/footer";
 import Profile from "../components/Profile/Profile";
@@ -77,7 +76,8 @@ const AccountPage = ({ choice=1 }) => {
           </svg>
           My bookings
         </Link>
-        <Link className={linkClasses("listings")} to={"/Account/listings"}>
+        {(User.role != 'user' && User.role != 'admin') && (
+          <Link className={linkClasses("listings")} to={"/Account/listings"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -94,13 +94,14 @@ const AccountPage = ({ choice=1 }) => {
           </svg>
           My Listings
         </Link>
+        )}
         
         {choice==1 && <Profile User={User}/>}
         {choice==2 && <MyBookings/>}
         {choice==3 && <MyListing/>}
 
       </div>
-      <div className="relative">
+      <div className="relative translate-y-8">
         <Footer />
       </div>
     </div>

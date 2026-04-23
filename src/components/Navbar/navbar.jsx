@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import "./Navbar.css";
+import "./navbar.css";
 import logo from "../../assets/logo.png";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -18,6 +18,8 @@ const Navbar = ({ showNavMid2 = true }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setendDate] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const {search, setSearch } = useContext(UserContext)
 
   useEffect(() => {
     // Function to handle scroll event
@@ -135,7 +137,13 @@ const Navbar = ({ showNavMid2 = true }) => {
               <span className="text-gray-500 font-medium">Where</span>
               <input
                 type="text"
-                placeholder="Search destination"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Empty input resets to the sentinel so home.jsx falls back
+                  // to fetching all listings instead of searching for "".
+                  setSearch(value === "" ? "Search destination" : value);
+                }}
+                placeholder={"Search destination"}
                 className="ml-2 w-full p-2 border-transparent focus:ring-0 outline-none rounded-full text-gray-700 placeholder-gray-400 hover:bg-gray-100 hover:scale-105 transition duration-150 ease-in-out"
               />
             </li>

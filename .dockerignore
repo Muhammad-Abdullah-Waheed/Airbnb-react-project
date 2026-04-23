@@ -1,0 +1,15 @@
+node_modules
+airbnb-api/node_modules
+dist
+build
+.git
+.gitignore
+.env
+.env.*
+airbnb-api/.env
+airbnb-api/.env.*
+*.log
+.DS_Store
+README.md
+Dockerfile
+.dockerignore

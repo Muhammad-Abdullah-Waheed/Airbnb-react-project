@@ -1,13 +1,21 @@
 {
-  "name": "airbnb_web",
+  "name": "airbnb-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend:install": "npm --prefix airbnb-api install",
+    "backend:start": "npm --prefix airbnb-api start",
+    "backend:dev": "npm --prefix airbnb-api run dev",
+    "postinstall": "npm --prefix airbnb-api install",
+    "start": "cross-env NODE_ENV=production npm --prefix airbnb-api start"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -15,18 +23,15 @@
     "@mui/icons-material": "^6.1.2",
     "@mui/material": "^6.1.2",
     "axios": "^1.7.7",
+    "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
-    "express": "^4.21.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "4.1",
-    "nodemon": "^3.1.7",
     "react": "^18.3.1",
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0",
     "react-social-icons": "^6.18.0",
     "react-swipeable": "^7.0.1",
-    "swiper": "^11.1.14",
-    "typescript": "^5.6.2"
+    "swiper": "^11.1.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -40,7 +45,6 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
     "postcss": "^8.4.47",
-    "react-router-dom": "^6.27.0",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.8"
   }

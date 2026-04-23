@@ -1,0 +1,28 @@
+# One-click deploy config for Render.com.
+# Import this repo into Render with "Blueprint" and it will create both services.
+#
+# Before first deploy, in the Render dashboard set these environment variables
+# (or paste them in the Environment tab):
+#   MONGODB_URI   - full MongoDB Atlas connection string
+#   JWT_SECRET    - long random string (32+ chars)
+#   CORS_ORIGIN   - public URL of the frontend (for the monolith, the same
+#                   URL as the backend, or leave empty)
+
+services:
+  - type: web
+    name: airbnb-fullstack
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
