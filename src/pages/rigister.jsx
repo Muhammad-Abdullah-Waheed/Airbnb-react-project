@@ -26,36 +26,43 @@ const Modal = ({ isOpen, onClose }) => {
   const [usernumber, setUsernumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword0, setShowPassword0] = useState(false); // To toggle visibility of password
-  const [showPassword1, setShowPassword1] = useState(false); // To toggle visibility of password
-  const [isHost, setIsHost] = useState(false); // To toggle visibility of
+  const [showPassword0, setShowPassword0] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [isHost, setIsHost] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const { User, SetUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
-  // It will Register a new user in the database
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      console.log({ name, email, usernumber, password });
-      try {
-        axios.post("/api/register", {
-          name: name,
-          email: email,
-          password: password,
-          usernumber: usernumber,
-          role: isHost? 'host':'user'
-        });
-        console.log("Rigisteration successful _!");
+    setErrorMsg("");
 
-        navigate("/login");
-      } catch (error) {
-        console.log(error);
-      }
-      // Logic to handle registration
-    } else {
-      alert("Passwords do not match");
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await axios.post("/api/register", {
+        name,
+        email,
+        password,
+        usernumber,
+        role: isHost ? "host" : "user",
+      });
+      navigate("/login");
+    } catch (error) {
+      const serverMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Registration failed. Please try again.";
+      setErrorMsg(serverMessage);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -185,12 +192,21 @@ const Modal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Register button */}
+          {errorMsg && (
+            <div
+              role="alert"
+              className="mb-2 rounded-md bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"
+            >
+              {errorMsg}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-theme text-white py-1 rounded-lg hover:scale-[101%]"
+            disabled={submitting}
+            className="w-full bg-theme text-white py-1 rounded-lg hover:scale-[101%] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Register
+            {submitting ? "Registering..." : "Register"}
           </button>
         </form>
 

@@ -53,7 +53,9 @@ const HomePage = () => {
     <div className="flex flex-col">
       <Navbar />
       <Filter />
-      <div className="mt-40">
+      {/* Small top margin on mobile (only the compact search pill is fixed);
+          large top margin on desktop to clear the stacked fixed navbar. */}
+      <div className="mt-4 md:mt-40">
         {listings && User && User.role === "admin" && (
           <Cards list={listings} showbuttons={true} />
         )}

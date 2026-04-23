@@ -38,14 +38,21 @@ const findOverlap = async (listingId, checkIn, checkOut, now = new Date()) =>
     ],
   });
 
-// Admin-only in a real product; kept for development/debugging.
-router.get("/allBookings", async (req, res) => {
+// Admin-only: returns every booking in the system. Requires a verified JWT
+// AND admin role, otherwise this would leak every guest's data.
+router.get("/allBookings", verifyToken, async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Forbidden: admin only" });
+    }
     await expireStaleBookings();
-    const bookings = await Booking.find({});
+    const bookings = await Booking.find({}).sort({ createdAt: -1 });
     return res.json(bookings);
   } catch (err) {
-    return res.status(500).send(err);
+    console.error("Error fetching all bookings:", err);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching bookings" });
   }
 });
 
@@ -65,12 +72,8 @@ router.get("/bookings/user/:Id", verifyToken, async (req, res) => {
     await expireStaleBookings();
     const bookings = await Booking.find({ user: Id }).sort({ createdAt: -1 });
 
-    if (bookings.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No bookings found for this guest" });
-    }
-
+    // "No bookings" is a valid state, not an error. Return 200 with an empty
+    // array so the frontend can render an empty state instead of a fail path.
     return res.status(200).json({ bookings });
   } catch (error) {
     console.error("Error fetching bookings:", error);

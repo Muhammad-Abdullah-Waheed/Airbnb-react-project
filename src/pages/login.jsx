@@ -25,23 +25,27 @@ const Modal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [logined, setLogined] = useState(false);
-  const { User , SetUser } = useContext(UserContext);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const { User, SetUser } = useContext(UserContext);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const user = await axios.post("/api/login", {
-        email: email,
-        password: password,
-      });
-      console.log("Login successful _!");
+    setErrorMsg("");
 
-      SetUser(user.data)
-      
+    try {
+      setSubmitting(true);
+      const user = await axios.post("/api/login", { email, password });
+      SetUser(user.data);
       setLogined(true);
     } catch (error) {
-      alert("Uscessful login due to Invalid credentials!");
-      console.log(error);
+      const serverMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Invalid email or password.";
+      setErrorMsg(serverMessage);
+    } finally {
+      setSubmitting(false);
     }
   };
   if (logined) {
@@ -77,12 +81,21 @@ const Modal = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Login button */}
+          {errorMsg && (
+            <div
+              role="alert"
+              className="mb-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"
+            >
+              {errorMsg}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-theme text-white py-1 rounded-lg hover:scale-[101%]"
+            disabled={submitting}
+            className="w-full bg-theme text-white py-1 rounded-lg hover:scale-[101%] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Login
+            {submitting ? "Logging in..." : "Login"}
           </button>
         </form>
 

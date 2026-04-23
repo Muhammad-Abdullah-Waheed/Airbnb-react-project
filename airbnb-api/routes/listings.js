@@ -135,22 +135,19 @@ router.get("/getlistings/:id", async (req, res) => {
 
 // Fetch listings by the owner's email. Kept public to keep existing frontend
 // behavior working — tighten to `verifyToken` + owner check if needed.
+// "No listings" is a valid state for a new host, not an error, so we return
+// 200 with an empty array and let the UI render its empty state.
 router.get("/listings/:userEmail", async (req, res) => {
   try {
     const userEmail = String(req.params.userEmail).toLowerCase().trim();
-
     const listings = await Listing.find({ UserEmail: userEmail });
-
-    if (listings.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No listings found for this email",
-      });
-    }
 
     return res.status(200).json({
       success: true,
-      message: "Listings fetched successfully",
+      message:
+        listings.length === 0
+          ? "No listings yet"
+          : "Listings fetched successfully",
       listings,
     });
   } catch (error) {
@@ -173,13 +170,16 @@ router.get("/listings/search/:location", async (req, res) => {
 
     const safeQuery = escapeRegex(query);
 
+    // Hard cap on response size to keep the payload bounded and protect the
+    // DB from broad queries like a single-letter search.
+    const MAX_SEARCH_RESULTS = 60;
     const listings = await Listing.find({
       $or: [
         { "address.street": { $regex: safeQuery, $options: "i" } },
         { "address.suburb": { $regex: safeQuery, $options: "i" } },
         { "address.country": { $regex: safeQuery, $options: "i" } },
       ],
-    });
+    }).limit(MAX_SEARCH_RESULTS);
 
     if (listings.length === 0) {
       return res

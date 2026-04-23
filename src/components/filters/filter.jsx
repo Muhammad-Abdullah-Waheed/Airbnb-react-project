@@ -19,8 +19,9 @@ function Filter() {
   }, []);
   // Function to handle filter selection
   return (
-    <div className={`filter sticky z-20  shadow-md  bg-white ${
-      isScrolled ? "top-[70px]" : "top-[160px]"} transition-all duration-100 ease-in-out`}>
+    <div className={`filter sticky z-20 shadow-md bg-white ${
+      isScrolled ? "top-[60px] md:top-[70px]" : "top-[70px] md:top-[160px]"
+    } transition-all duration-100 ease-in-out`}>
       <div className="filters-containers">
       {links.map((item, i) => (
         <div

@@ -59,6 +59,7 @@ export const BookingCard = ({ listing, bookingInfo, admin = false }) => {
   const seeListing = (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
+    if (!listing?._id) return;
     navigate(`/listing/${listing._id}`);
   };
 
@@ -110,15 +111,21 @@ export const BookingCard = ({ listing, bookingInfo, admin = false }) => {
     <div className="card-container relative p-3">
       <button onClick={seeListing} className="w-full text-left">
         <div className="card-image-container">
-          {listing.images.map((src, i) =>
-            src ? (
-              <img
-                key={i}
-                src={src}
-                className="card-image object-cover"
-                alt={`slide ${i}`}
-              />
-            ) : null
+          {listing?.images?.length ? (
+            listing.images.map((src, i) =>
+              src ? (
+                <img
+                  key={i}
+                  src={src}
+                  className="card-image object-cover"
+                  alt={`slide ${i}`}
+                />
+              ) : null
+            )
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
+              Listing no longer available
+            </div>
           )}
         </div>
 
@@ -143,13 +150,7 @@ export const BookingCard = ({ listing, bookingInfo, admin = false }) => {
             Check-Out: {format(new Date(booking.checkOut), "yyyy-MM-dd")}
           </h5>
           <p className="font-semibold">
-            <span className="font-normal">Total</span> ${booking.price}{" "}
-            <span className="font-normal">for</span>{" "}
-            {(
-              (booking.price - 0.2 * listing.price) /
-              listing.price
-            ).toFixed(0)}{" "}
-            <span className="font-normal">nights</span>
+            <span className="font-normal">Total</span> ${booking.price}
           </p>
         </div>
       </button>

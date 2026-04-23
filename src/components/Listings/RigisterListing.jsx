@@ -140,7 +140,7 @@ const RegisterListing = ({ newListing = true }) => {
         console.error(error);
       });
     }
-    navigate('Account/listings');
+    navigate('/Account/listings');
   };
 
   const Amenities = [

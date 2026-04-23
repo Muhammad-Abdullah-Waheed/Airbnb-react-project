@@ -34,14 +34,8 @@ function App() {
             <Route path="/Account/listings/update/:id" element={<RegisterListing newListing={false}/>} />
 
 
-            <Route path="/Account/admin/listings" element={<RegisterListing/>} />
-
+            <Route path="/Account/admin/listings" element={<RegisterListing />} />
             <Route path="/listing/:id" element={<ListingDetailsPage />} />
-
-
-
-
-            <Route path="/test" element={<RegisterListing />} />
           </Routes>
         </BrowserRouter>
       </UserContextProvider>

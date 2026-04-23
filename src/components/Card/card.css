@@ -1,9 +1,9 @@
 .cards-flex {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
   padding: 1rem 3vw;
 }
 
@@ -20,12 +20,15 @@
 }
 
 .card-image-container {
-  max-width: 100%;
-  max-height: 100%;
+  /* Default size on large screens (> 1640px). Prevents the image from
+     blowing up on ultra-wide monitors. Smaller screens override this
+     with vw-based sizes in the media queries below. */
+  width: 320px;
+  height: 300px;
   display: flex;
   overflow-x: auto;
-  scrollbar-width: none; 
-  
+  scrollbar-width: none;
+
   border-radius: 10px;
 }
 

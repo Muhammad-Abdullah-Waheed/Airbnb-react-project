@@ -75,17 +75,15 @@
 }
 
 @media (max-width: 800px) {
-    .navbar {
+    /* Hide desktop-only elements. NOTE: the class in JSX is "Navbar" (capital N),
+       CSS selectors are case-sensitive, so we must match it exactly. */
+    .Navbar {
         display: none;
     }
 
-    .navbar-container{
+    /* Also hide the desktop search pill that sits below the top bar. */
+    .nav-mid2 {
         display: none;
-    }
-
-    .navbar {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
     }
 
     .nav-profile {
@@ -97,22 +95,55 @@
     .bottom-nav {
         display: flex;
         justify-content: center;
+        align-items: center;
         height: 5rem;
-        display: block;
         position: fixed;
         bottom: 0;
+        left: 0;
         width: 100%;
+        background-color: #fff;
         border-top: 1px solid var(--grey);
         box-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%);
+        z-index: 40;
     }
 
-
+    /* Compact, Airbnb-style search pill at the top of the mobile screen. */
     .mobile-search-bar {
-        display: block;
-        background-color: rgb(255, 254, 254);
         display: flex;
-        
-        justify-content: center;
         align-items: center;
+        gap: 10px;
+        margin: 10px 16px;
+        padding: 10px 16px;
+        background-color: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 999px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Override the default desktop icon styling so it sits flat inside the pill. */
+    .mobile-search-bar .searchbar-icon {
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        color: #222;
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    /* Input fills the rest of the pill. */
+    .mobile-search-bar > div {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .mobile-search-bar .search-input,
+    .mobile-search-bar input[type="text"] {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 0.9rem;
+        color: #222;
     }
 }

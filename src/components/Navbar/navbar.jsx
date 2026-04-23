@@ -72,24 +72,22 @@ const Navbar = ({ showNavMid2 = true }) => {
             </div>
           ) : (
             <div
-              className={`mid-navbar-3 cursor-pointer flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300 hover:scale-105 transition duration-150 ease-in-out  ${
+              className={`mid-navbar-3 absolute left-1/2 -translate-x-1/2 cursor-pointer flex items-center gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300 hover:scale-105 transition duration-150 ease-in-out  ${
                 !isScrolled ? "animate-scaleIn" : "animate-scaleUp"
               }`}
             >
               <div>Anywhere</div>
-              <div className="border-l border-gray-300"></div>
+              <div className="border-l border-gray-300 h-5"></div>
               <div>Any week</div>
-              <div className="border-l border-gray-300"></div>
+              <div className="border-l border-gray-300 h-5"></div>
               <div>Add guests</div>
-              <button className="bg-primary text-white p-1 rounded-full">
+              <button className="bg-primary text-white p-1 rounded-full flex items-center justify-center">
                 <SearchRoundedIcon
                   style={{
                     backgroundColor: "var(--theme)",
-                    marginLeft: "4px",
                     borderRadius: "20px",
                     height: "1.5rem",
                     width: "1.5rem",
-                    transform: "translateY(-5px)",
                   }}
                 />
               </button>

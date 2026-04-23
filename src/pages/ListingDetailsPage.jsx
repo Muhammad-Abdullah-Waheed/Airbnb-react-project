@@ -579,16 +579,16 @@ const ListingDetailsPage = () => {
                 <div className="underline">
                   ${listing.price} X {totaldays} nights
                 </div>
-                <div className="">${listing.price * 5} </div>
+                <div className="">${listing.price * totaldays} </div>
               </div>
               <div className="flex justify-between pt-2">
-                <div className="underline">$Airbnb Service Fee</div>
-                <div className="">${listing.price * totaldays * 0.2} </div>
+                <div className="underline">Airbnb Service Fee</div>
+                <div className="">${(listing.price * totaldays * 0.2).toFixed(2)} </div>
               </div>
               <div className="flex justify-between pt-2 border-t-[2px]">
                 <div className="font-semibold text-lg">Total before taxes</div>
                 <div className="">
-                  ${listing.price * totaldays + listing.price * totaldays * 0.2}{" "}
+                  ${(listing.price * totaldays * 1.2).toFixed(2)}{" "}
                 </div>
               </div>
 
