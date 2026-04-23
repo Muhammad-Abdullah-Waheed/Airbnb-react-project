@@ -99,19 +99,34 @@ Visit `http://localhost:4000` — the React app is now served by the backend.
 
 ## Deployment
 
-### Option A — Render.com (recommended, easiest)
+### Option A — Vercel (recommended, no credit card required)
 
-1. Push this repo to GitHub (it's already set up).
-2. In Render, click **New → Blueprint** and point it at this repo.
-   Render will pick up `render.yaml` automatically.
-3. In the service's **Environment** tab, set:
-   - `MONGODB_URI` — your MongoDB Atlas URI
-   - `JWT_SECRET` — a long random string
-   - `CORS_ORIGIN` — leave empty or set to your Render URL
-4. Render builds (`npm install && npm run build`) and starts (`npm start`)
+The whole stack (React frontend + Express API) deploys as a single Vercel
+project. The Express app runs as a serverless function via `api/index.js`;
+the Vite build is served statically. See `vercel.json` for routing.
+
+1. Push this repo to GitHub.
+2. In Vercel, click **Add New → Project** and import the repo. Vercel
+   auto-detects Vite and uses `vercel.json` for function + rewrite config.
+3. Under **Environment Variables**, add:
+   - `MONGODB_URI` — your MongoDB Atlas SRV URI
+   - `JWT_SECRET` — a long random string (≥ 64 chars)
+   - `NODE_ENV` — `production`
+4. Click **Deploy**. Once live, the API is at `<your-app>.vercel.app/api/*`
+   and the frontend is at `<your-app>.vercel.app/`.
+
+### Option B — Render.com (Blueprint)
+
+Render now requires a credit card to create services. If you have one:
+
+1. In Render, click **New → Blueprint** and point it at this repo.
+   Render picks up `render.yaml` automatically.
+2. In the service's **Environment** tab, set `MONGODB_URI`, `JWT_SECRET`,
+   and optionally `CORS_ORIGIN`.
+3. Render builds (`npm install && npm run build`) and starts (`npm start`)
    automatically. Health check hits `/api/healthz`.
 
-### Option B — Docker
+### Option C — Docker
 
 ```bash
 docker build -t airbnb-web .
@@ -122,7 +137,7 @@ docker run --rm -p 4000:4000 \
   airbnb-web
 ```
 
-### Option C — Split frontend and backend
+### Option D — Split frontend and backend
 
 - Frontend on **Vercel** or **Netlify** (point at project root, build
   command `npm run build`, output `dist`). Set `VITE_API_URL` to the

@@ -30,11 +30,16 @@ for (const key of required) {
 const app = express();
 
 const isProd = process.env.NODE_ENV === "production";
+// Serverless platforms like Vercel / Netlify set these; in that case we never
+// call app.listen() and the caller is responsible for Mongo connection reuse.
+const isServerless = Boolean(
+  process.env.VERCEL || process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME
+);
 const port = process.env.PORT || 4000;
 
-// When deployed behind Render / Nginx / any reverse proxy, this makes
-// express use the correct client IP (important for rate limiting) and marks
-// connections as secure so the `secure` cookie flag works.
+// When deployed behind Render / Nginx / Vercel / any reverse proxy, this
+// makes Express use the correct client IP (important for rate limiting) and
+// marks connections as secure so the `secure` cookie flag works.
 app.set("trust proxy", 1);
 
 app.use(helmet());
@@ -50,6 +55,8 @@ app.use(mongoSanitize());
 
 // CORS — supports a comma-separated list of allowed origins so you can permit
 // both localhost (for dev) and the deployed frontend URL at the same time.
+// On a Vercel same-origin deploy the frontend and backend share a host, so
+// browser requests have no Origin header and pass through the `!origin` branch.
 const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
   .split(",")
   .map((o) => o.trim())
@@ -58,7 +65,6 @@ const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
 app.use(
   cors({
     origin: (origin, cb) => {
-      // Allow server-to-server / curl / same-origin (no Origin header).
       if (!origin) return cb(null, true);
       if (allowedOrigins.includes(origin)) return cb(null, true);
       return cb(new Error(`CORS: origin ${origin} not allowed`));
@@ -104,15 +110,14 @@ app.use("/api", UserRoute);
 app.use("/api", ListingRoute);
 app.use("/api", BookingRoute);
 
-// In production, serve the built React frontend from `/dist` (created by
-// `npm run build` in the project root). This lets us deploy the whole app
-// as a single service, which is the simplest setup for a free-tier demo.
-if (isProd) {
+// In production on a single-process host (Render / Docker / bare metal),
+// serve the built React frontend from `/dist` (created by `npm run build` in
+// the project root). Not needed on Vercel — Vercel serves the static build
+// itself and only invokes this function for /api/* requests.
+if (isProd && !isServerless) {
   const clientDist = path.resolve(__dirname, "..", "dist");
   if (fs.existsSync(clientDist)) {
     app.use(express.static(clientDist));
-    // Everything that isn't an /api/* route should fall through to React's
-    // client-side router.
     app.get(/^\/(?!api).*/, (req, res) => {
       res.sendFile(path.join(clientDist, "index.html"));
     });
@@ -136,46 +141,67 @@ app.use((err, req, res, next) => {
   });
 });
 
-// --- Server lifecycle ---
+// --- Database connection ---
+//
+// Cached across invocations so warm serverless containers reuse a single
+// connection instead of opening a new one per request (which would exhaust
+// Atlas connections in seconds).
+let connectionPromise = null;
 
-async function connectToMongoDB() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: "sample_airbnb",
+function ensureMongo() {
+  if (connectionPromise) return connectionPromise;
+  connectionPromise = mongoose
+    .connect(process.env.MONGODB_URI, { dbName: "sample_airbnb" })
+    .then((conn) => {
+      console.log("[mongo] connected");
+      return conn;
+    })
+    .catch((err) => {
+      console.error("[mongo] connection error:", err);
+      // Reset so the next request can retry instead of being stuck on a
+      // rejected promise forever.
+      connectionPromise = null;
+      throw err;
     });
-    console.log("[mongo] connected");
-  } catch (error) {
-    console.error("[mongo] connection error:", error);
-    process.exit(1);
-  }
+  return connectionPromise;
 }
 
-const startServer = async () => {
-  await connectToMongoDB();
-  const server = app.listen(port, () => {
-    console.log(`[server] listening on port ${port} (env=${process.env.NODE_ENV || "development"})`);
-  });
+// --- Server lifecycle (only when run directly, not when imported) ---
+//
+// On Vercel/Netlify the platform imports `app` and invokes it per-request;
+// no .listen() call. On a VM / Render / Docker, running `node index.js`
+// makes `require.main === module`, which triggers the listen path.
+if (require.main === module && !isServerless) {
+  (async () => {
+    try {
+      await ensureMongo();
+    } catch {
+      process.exit(1);
+    }
 
-  // Graceful shutdown: on SIGTERM (sent by Render/Docker/k8s when redeploying)
-  // stop accepting new connections, wait for in-flight ones to finish, then
-  // close the DB connection. Without this, clients can hit hard TCP resets
-  // during a deploy.
-  const shutdown = async (signal) => {
-    console.log(`[server] ${signal} received, shutting down...`);
-    server.close(async () => {
-      await mongoose.connection.close();
-      console.log("[server] shutdown complete");
-      process.exit(0);
+    const server = app.listen(port, () => {
+      console.log(
+        `[server] listening on port ${port} (env=${process.env.NODE_ENV || "development"})`
+      );
     });
 
-    setTimeout(() => {
-      console.error("[server] forced shutdown after timeout");
-      process.exit(1);
-    }, 10_000).unref();
-  };
+    const shutdown = async (signal) => {
+      console.log(`[server] ${signal} received, shutting down...`);
+      server.close(async () => {
+        await mongoose.connection.close();
+        console.log("[server] shutdown complete");
+        process.exit(0);
+      });
 
-  process.on("SIGTERM", () => shutdown("SIGTERM"));
-  process.on("SIGINT", () => shutdown("SIGINT"));
-};
+      setTimeout(() => {
+        console.error("[server] forced shutdown after timeout");
+        process.exit(1);
+      }, 10_000).unref();
+    };
 
-startServer();
+    process.on("SIGTERM", () => shutdown("SIGTERM"));
+    process.on("SIGINT", () => shutdown("SIGINT"));
+  })();
+}
+
+module.exports = { app, ensureMongo };
